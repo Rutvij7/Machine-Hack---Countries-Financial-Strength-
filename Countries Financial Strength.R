@@ -49,7 +49,7 @@ plot_correlation(train, type = 'continuous')
 
 library(ggplot2)
 
-par(mfrow =c(1,1))
+par(mfrow =c(2,3))
 
 
 hist(Year, main = 'Year',  col = 'darkseagreen')
@@ -61,36 +61,54 @@ hist(Trade, col = 'darkseagreen', main = 'Trade')
 
 ## Inflationn
 
-quantile(train$Inflation, 0.95) ## Remove observation Inflation > 42%
-quantile(Inflation, 0.99999)
+# quantile(train$Inflation, 0.95) ## Remove observation Inflation > 42%
+# quantile(Inflation, 0.99999)
 
 
 ## Balance 
 
-quantile(Balance, 0.1)
-quantile(Balance, 0.015) ## Remove Obser. less than 1.5% quant.
+# quantile(Balance, 0.1)
+# quantile(Balance, 0.015) ## Remove Obser. less than 1.5% quant.
 
-quantile(Balance, 0.99) ## Remove Obser. more than 99% quant.
+# quantile(Balance, 0.99) ## Remove Obser. more than 99% quant.
 
 ## Trade
 
-quantile(Trade, 0.99) ## Remove Obser. more than 99% quant. 
-quantile(Trade, 0.999) 
+# quantile(Trade, 0.99) ## Remove Obser. more than 99% quant. 
+# quantile(Trade, 0.999) 
 
 ## Export
 
-quantile(Exports, 0.98) ## Remove Obser. more than 99% quant.
+# quantile(Exports, 0.98) ## Remove Obser. more than 99% quant.
 
 
-train = train[which(Balance > -48856314353 & Balance < 80614820110 & Inflation < 42 & 
-                      GDP >= -10.2 & GDP <= 16.23 & Trade <= 239.4683), ]
+# train = train[which(Balance > -48856314353 & Balance < 80614820110 & Inflation < 42 & 
+#                      GDP >= -10.2 & GDP <= 16.23 & Trade <= 239.4683), ]
 
-train = train[which(Exports <= 2.4354e+11), ]
-                      
+# train = train[which(Exports <= 2.4354e+11), ]
+
+    
+## NORMALIZATION OF DATA                  
+
+library(moments)
+library(forecast)
+
+BoxCox.lambda(GDP)
+
+BoxCox.lambda(train$Trade)
+train$Trade = log(train$Trade)
+
+BoxCox.lambda(Exports)
+Exports = log(Exports)
+
+BoxCox.lambda(train$Inflation)  
+train$Inflation = sqrt(train$Inflation)
+train$Inflation = log(train$Inflation)
 
 attach(train)
 
-dim(train)
+## REMOVE NA'a Produced in Inflation variable
 
+train = na.omit(train)
 
 
