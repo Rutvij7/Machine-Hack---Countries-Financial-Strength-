@@ -56,7 +56,7 @@ plot_correlation(train, type = 'continuous')
 
 library(ggplot2)
 
-par(mfrow =c(2,3))
+par(mfrow =c(1,1))
 
 
 hist(Year, main = 'Year',  col = 'darkseagreen')
@@ -65,6 +65,16 @@ hist(Inflation, col = 'darkseagreen',  main = 'Inflation')
 hist(GDP, col = 'darkseagreen',  main = 'GDP')
 hist(Exports, col = 'darkseagreen',  main = 'Exports')
 hist(Trade, col = 'darkseagreen', main = 'Trade')
+
+## SCLE DATA
+
+# scale1 = train[, c(4,5,6,7,8)]
+# scale1 = scale(scale1)
+
+# nonscale = train[, c(1,2,3)]
+
+# train = data.frame(nonscale, scale1)
+
 
 ## Inflationn
 
@@ -134,9 +144,9 @@ train = na.omit(train)
 
 # ggcorrplot(cor(train[,-c(1,2)]), type = 'upper', method = 'circle') 
 
-# model = lm(Balance ~ Trade + Inflation)
+# model1 = lm(Balance ~ Trade)
 
-# summary(model)
+# summary(model1)
 
 
 ## ~ ~ REGRESSION TREE ~ ~ ##
@@ -146,9 +156,10 @@ library(rpart.plot)
 library(rattle)
 library(RColorBrewer)
 
-r.ctrl = rpart.control(minsplit = 25, minbucket = 5, cp = , xval =10)
+r.ctrl = rpart.control(minsplit = 30, minbucket = 5, cp = , xval =10)
 
-model2 = rpart(formula = Balance ~. , data = train, method = 'anova', control = r.ctrl)
+model2 = rpart(formula = Balance ~ . , 
+               data = train, method = 'anova', control = r.ctrl)
 
 # fancyRpartPlot(model2)
 printcp(model2)
@@ -161,7 +172,7 @@ par(mfrow = c(1,2))
 rsq.rpart(model.prun)
 
 
-test = read.csv('final_test_data.csv')
+# test = read.csv('final_test_data.csv')
 
 
 ## Plot Graph on Train Dataset 
@@ -181,9 +192,17 @@ plot(predicted_balance, col = 'red')
 lines(actual_balance, col ='blue')
 lines(predicted_balance, col = 'red')
 
+predicted_balance = abs(predicted_balance)
+Balance =abs(Balance)
 
+## SCORING MACHINE LEARNING CHALLENGE ## 
+## https://www.machinehack.com/course/mlds-predict-financial-strength-of-countries-hackathon/leaderboard
 
+SLE = (log(predicted_balance + 1) - log(Balance + 1))^2
 
+Eval = sqrt(mean(SLE))
+
+score = 1/(1+exp(Eval))
 
 
 
