@@ -14,11 +14,18 @@ dim(train)
 ##  ~ ~ ~ DATA CLEANING ~ ~ ~  ## 
 
 ## Missing Values
+
 colSums(is.na(train))
 
-cor(train[, -c(1,2,3)]) ## Due to weak Coorelation between continuous variables, we decided to ommit -NA-
+## Due to weak Coorelation between continuous variables, we decided to ommit -NA-
 
 train = na.omit(train)
+
+library(ggcorrplot)
+
+ggcorrplot(cor(train[,-c(1,2,3)]), type = 'upper', method = 'circle')
+
+cor(train[, -c(1,2,3)])
 
 attach(train)
 
@@ -110,5 +117,78 @@ attach(train)
 ## REMOVE NA'a Produced in Inflation variable
 
 train = na.omit(train)
+
+
+
+##  ~ ~ ~ LINEAR REGRESSION MODEL ~ ~ ~  ##
+
+# plot(Year, Balance, col = 'maroon', abline(lm(Balance~Year)))
+# plot(Inflation, Balance, col = 'maroon', abline(lm(Balance~Inflation)))
+# plot(GDP, Balance, col = 'maroon', abline(lm(Balance~GDP)))
+# plot(Exports, Balance, col = 'maroon', abline(lm(Balance~Exports)))
+# plot(Trade, Balance, col = 'maroon', abline(lm(Balance~Trade)))
+
+## Correlation Improved 
+
+# attach(train)
+
+# ggcorrplot(cor(train[,-c(1,2)]), type = 'upper', method = 'circle') 
+
+# model = lm(Balance ~ Trade + Inflation)
+
+# summary(model)
+
+
+## ~ ~ REGRESSION TREE ~ ~ ##
+
+library(rpart)
+library(rpart.plot)
+library(rattle)
+library(RColorBrewer)
+
+r.ctrl = rpart.control(minsplit = 25, minbucket = 5, cp = , xval =10)
+
+model2 = rpart(formula = Balance ~. , data = train, method = 'anova', control = r.ctrl)
+
+# fancyRpartPlot(model2)
+printcp(model2)
+
+model.prun = prune(model2, cp = 0.01, 'CP')
+
+summary(model.prun)
+
+par(mfrow = c(1,2))
+rsq.rpart(model.prun)
+
+
+test = read.csv('final_test_data.csv')
+
+
+## Plot Graph on Train Dataset 
+
+train$test_balance = predict(model.prun, train, method = 'anova', interval = 'confidence' )
+
+actual_balance = train[, 4]
+predicted_balance = train[,9]
+
+backtrack = data.frame(actual_balance, predicted_balance)
+
+par(mfrow = c(1,1))
+
+plot(actual_balance, col = 'blue')
+plot(predicted_balance, col = 'red')
+
+lines(actual_balance, col ='blue')
+lines(predicted_balance, col = 'red')
+
+
+
+
+
+
+
+
+
+
 
 
