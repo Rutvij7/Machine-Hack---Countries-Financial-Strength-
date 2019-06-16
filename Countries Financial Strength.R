@@ -196,7 +196,6 @@ predicted_balance = abs(predicted_balance)
 Balance =abs(Balance)
 
 ## SCORING MACHINE LEARNING CHALLENGE ## 
-## https://www.machinehack.com/course/mlds-predict-financial-strength-of-countries-hackathon/leaderboard
 
 SLE = (log(predicted_balance + 1) - log(Balance + 1))^2
 
