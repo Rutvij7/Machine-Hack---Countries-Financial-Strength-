@@ -14,3 +14,7 @@ Approach taken to Predict Country's Financial Strength Model :
 *Applied Regression Tree Model - R-squared around 0.80 
 *Applied model on test dataset and poredicted 'Balance' variable
 *Also, applied model on train dataset - plot graph for actual Balance and predicted Balance variable. 
+
+
+# Need Thoughts to Improve Model. Thnaks!
+
