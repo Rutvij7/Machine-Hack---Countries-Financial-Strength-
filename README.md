@@ -1,4 +1,5 @@
-# Machine-Hack---Countries-Financial-Strength
+## Machine-Hack-Countries-Financial-Strength
+
 Based on Country's trade with each other - Predict particular country's financial strength.  
 
 
@@ -16,5 +17,4 @@ Approach taken to Predict Country's Financial Strength Model :
 *Also, applied model on train dataset - plot graph for actual Balance and predicted Balance variable. 
 
 
-# Need Thoughts to Improve Model. Thnaks!
-
+## Acknowledge : Machine HAck competition. 
