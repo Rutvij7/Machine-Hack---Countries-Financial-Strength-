@@ -25,4 +25,5 @@ Approach taken to Predict Country's Financial Strength Model :
 - While checking, Root Mean Squared Log Error (RMSLE) to evaluate model score - we identified - applying log() function to negative values gives NAs. So, we first applied abs() - absolute - and converted -ve into +ve and after that checked Squared Log Error. 
 
 ### Acknowledge: 
-Machine HAck competition. 
+
+Machine Hack - https://www.machinehack.com/ 
